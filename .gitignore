@@ -1,0 +1,16 @@
+pycache/
+*.pyc
+*.pyo
+*.pyd
+
+.venv/
+venv/
+
+.vscode/
+
+data/*.db-journal
+
+logs/*.log
+
+.DS_Store
+Thumbs.db
