@@ -1,27 +1,39 @@
-from database.database_manager import create_database
-from services.search_service import smart_search
+from database.database_manager import initialize_database
+from services.search_service import search_compound_menu
 
-create_database()
 
-while True:
+def show_banner():
+    print("=" * 50)
+    print("             ChemAI v2.0")
+    print("=" * 50)
 
-    print("\n==============================")
-    print("        ChemAI v1.0")
-    print("==============================")
-    print("1. Search Compound")
+
+def show_menu():
+    print("\n1. Search Compound")
     print("2. Exit")
 
-    choice = input("\nChoose : ")
 
-    if choice == "1":
+def main():
 
-        smart_search()
+    initialize_database()
 
-    elif choice == "2":
+    while True:
 
-        print("\nGoodbye!")
-        break
+        show_banner()
+        show_menu()
 
-    else:
+        choice = input("\nEnter your choice: ")
 
-        print("\nInvalid Choice!")
+        if choice == "1":
+            search_compound_menu()
+
+        elif choice == "2":
+            print("\nThank you for using ChemAI!")
+            break
+
+        else:
+            print("\nInvalid Choice!\n")
+
+
+if name == "main":
+    main()
