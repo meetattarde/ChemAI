@@ -1,55 +1,12 @@
 from database.search_database import search_compound
 from database.database_manager import save_compound
 from api.pubchem_api import fetch_compound
-from utils.logger import log
+from chemistry.structure import generate_structure
 
 
-def search_compound_menu():
+def display_result(data):
 
-    compound = input("\nEnter compound name : ").strip()
-
-    log(f"Searching for {compound}")
-
-    result = search_compound(compound)
-
-    if result:
-
-        log(f"{compound} found in local database")
-
-        print("\n========== FOUND IN LOCAL DATABASE ==========\n")
-
-        print("Name :", result[1])
-        print("Formula :", result[2])
-        print("Molecular Weight :", result[3])
-        print("IUPAC Name :", result[4])
-        print("SMILES :", result[5])
-        print("InChIKey :", result[6])
-        print("PubChem CID :", result[7])
-
-        return
-
-    log(f"{compound} not found locally")
-    log("Searching PubChem")
-
-    print("\nNot found locally.")
-    print("Searching PubChem...\n")
-
-    data = fetch_compound(compound)
-
-    if data is None:
-
-        log(f"{compound} not found on PubChem")
-
-        print("Compound not found.")
-
-        return
-
-    save_compound(data)
-
-    log(f"{compound} downloaded from PubChem")
-    log(f"{compound} saved into SQLite database")
-
-    print("========== DOWNLOADED ==========\n")
+    print("\n========== COMPOUND ==========\n")
 
     print("Name :", data["name"])
     print("Formula :", data["formula"])
@@ -59,4 +16,51 @@ def search_compound_menu():
     print("InChIKey :", data["inchikey"])
     print("PubChem CID :", data["pubchem_cid"])
 
-    print("\nSaved to local database.")
+    image = generate_structure(
+        data["smiles"],
+        data["name"]
+    )
+
+    if image:
+        print("\nStructure Image :", image)
+    else:
+        print("\nStructure could not be generated.")
+
+
+def search_compound_menu():
+
+    compound = input("\nEnter compound name : ").strip().lower()
+
+    result = search_compound(compound)
+
+    if result:
+
+        data = {
+            "name": result[1],
+            "formula": result[2],
+            "molecular_weight": result[3],
+            "iupac_name": result[4],
+            "smiles": result[5],
+            "inchikey": result[6],
+            "pubchem_cid": result[7]
+        }
+
+        print("\nFound in local database.")
+        display_result(data)
+        return
+
+    print("\nNot found locally.")
+    print("Searching PubChem...\n")
+
+    data = fetch_compound(compound)
+
+    if data is None:
+        print("Compound not found.")
+        return
+
+    save_compound(data)
+
+    print("Downloaded from PubChem.")
+    display_result(data)
+
+    print("\nSaved into local database.")
