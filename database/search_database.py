@@ -1,49 +1,25 @@
-from database.search_database import search_compound
-from database.database_manager import save_compound
-from api.pubchem_api import get_compound
+import sqlite3
+
+DATABASE_PATH = "data/chemai.db"
 
 
-def smart_search():
+def search_compound(name):
 
-    compound = input("\nEnter compound name : ")
+    conn = sqlite3.connect(DATABASE_PATH)
 
-    result = search_compound(compound)
+    cursor = conn.cursor()
 
-    if result:
+    cursor.execute(
+        """
+        SELECT *
+        FROM compounds
+        WHERE LOWER(name)=LOWER(?)
+        """,
+        (name,)
+    )
 
-        print("\nFound in Local Database\n")
+    result = cursor.fetchone()
 
-        print("Name :", result[1])
-        print("Formula :", result[2])
-        print("Weight :", result[3])
+    conn.close()
 
-        if len(result) > 4:
-            print("IUPAC :", result[4])
-
-    else:
-
-        print("\nSearching PubChem...\n")
-
-        data = get_compound(compound)
-
-        if data is None:
-
-            print("Compound Not Found.")
-
-            return
-
-        print("Downloaded Successfully!\n")
-
-        print("Name :", data["name"])
-        print("Formula :", data["formula"])
-        print("Weight :", data["weight"])
-        print("IUPAC :", data["iupac"])
-
-        save_compound(
-            data["name"],
-            data["formula"],
-            data["weight"],
-            data["iupac"]
-        )
-
-        print("\nSaved into ChemAI Database!")
+    return result

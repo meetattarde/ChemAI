@@ -35,5 +35,5 @@ def main():
             print("\nInvalid Choice!\n")
 
 
-if name == "main":
+if __name__ == "__main__":
     main()
