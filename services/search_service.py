@@ -1,30 +1,91 @@
 from database.search_database import search_compound
 from database.database_manager import save_compound
 from api.pubchem_api import fetch_compound
+
 from chemistry.structure import generate_structure
+from chemistry.properties import calculate_properties
+from chemistry.functional_groups import detect_functional_groups
+from chemistry.lipinski import lipinski_analysis
+from chemistry.formula import molecular_formula
+from chemistry.atom_counter import count_atoms
+from chemistry.rings import ring_information
 
 
-def display_result(data):
+def display_report(data):
 
-    print("\n========== COMPOUND ==========\n")
+    print("\n" + "=" * 60)
+    print("                 CHEMAI REPORT")
+    print("=" * 60)
 
-    print("Name :", data["name"])
-    print("Formula :", data["formula"])
-    print("Molecular Weight :", data["molecular_weight"])
-    print("IUPAC Name :", data["iupac_name"])
-    print("SMILES :", data["smiles"])
-    print("InChIKey :", data["inchikey"])
-    print("PubChem CID :", data["pubchem_cid"])
+    print("\nCompound Information")
+    print("-" * 60)
+    print(f"Name              : {data['name']}")
+    print(f"Formula           : {data['formula']}")
+    print(f"Molecular Weight  : {data['molecular_weight']}")
+    print(f"IUPAC Name        : {data['iupac_name']}")
+    print(f"SMILES            : {data['smiles']}")
+    print(f"InChIKey          : {data['inchikey']}")
+    print(f"PubChem CID       : {data['pubchem_cid']}")
 
-    image = generate_structure(
-        data["smiles"],
-        data["name"]
-    )
+    print("\nDEBUG")
+    print("SMILES =", repr(data["smiles"]))
 
-    if image:
-        print("\nStructure Image :", image)
+    image = generate_structure(data["smiles"], data["name"])
+
+    properties = calculate_properties(data["smiles"])
+
+    groups = detect_functional_groups(data["smiles"])
+
+    lipinski = lipinski_analysis(data["smiles"])
+
+    atoms = count_atoms(data["smiles"])
+
+    rings = ring_information(data["smiles"])
+
+    formula = molecular_formula(data["smiles"])
+
+    print("\nCalculated Properties")
+    print("-" * 60)
+
+    for key, value in properties.items():
+        print(f"{key:<20}: {value}")
+
+    print("\nFunctional Groups")
+    print("-" * 60)
+
+    if groups:
+        for group in groups:
+            print("✓", group)
     else:
-        print("\nStructure could not be generated.")
+        print("None")
+
+    print("\nAtom Count")
+    print("-" * 60)
+
+    for atom, count in atoms.items():
+        print(f"{atom}: {count}")
+
+    print("\nRing Information")
+    print("-" * 60)
+
+    print(rings)
+
+    print("\nLipinski Rule")
+    print("-" * 60)
+
+    print(lipinski)
+
+    print("\nMolecular Formula")
+    print("-" * 60)
+
+    print(formula)
+
+    print("\nStructure Image")
+    print("-" * 60)
+
+    print(image)
+
+    print("\n" + "=" * 60)
 
 
 def search_compound_menu():
@@ -46,13 +107,13 @@ def search_compound_menu():
         }
 
         print("\nFound in local database.")
-        display_result(data)
+        display_report(data)
         return
 
-    print("\nNot found locally.")
-    print("Searching PubChem...\n")
+    print("\nSearching PubChem...\n")
 
     data = fetch_compound(compound)
+    print(data)
 
     if data is None:
         print("Compound not found.")
@@ -60,7 +121,6 @@ def search_compound_menu():
 
     save_compound(data)
 
-    print("Downloaded from PubChem.")
-    display_result(data)
+    display_report(data)
 
-    print("\nSaved into local database.")
+    print("\nSaved to local database.")

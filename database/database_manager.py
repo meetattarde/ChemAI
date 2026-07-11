@@ -5,11 +5,12 @@ DATABASE_PATH = "data/chemai.db"
 
 
 def get_connection():
-    return sqlite3.connect(DATABASE_PATH)
+    db_path = os.path.abspath(DATABASE_PATH)
+    print(f"[Database Manager] Using database: {db_path}")
+    return sqlite3.connect(db_path)
 
 
 def initialize_database():
-
     os.makedirs("data", exist_ok=True)
 
     conn = get_connection()
@@ -17,35 +18,22 @@ def initialize_database():
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS compounds (
-
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-
         name TEXT UNIQUE,
-
         formula TEXT,
-
         molecular_weight REAL,
-
         iupac_name TEXT,
-
         smiles TEXT,
-
         inchikey TEXT,
-
         pubchem_cid INTEGER,
-
         last_updated TEXT
-
     )
     """)
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS metadata (
-
         key TEXT PRIMARY KEY,
-
         value TEXT
-
     )
     """)
 
@@ -59,7 +47,6 @@ def initialize_database():
 
 
 def save_compound(data):
-
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -75,9 +62,7 @@ def save_compound(data):
         pubchem_cid,
         last_updated
     )
-
     VALUES (?,?,?,?,?,?,?,?)
-
     """,
     (
         data["name"],

@@ -1,12 +1,13 @@
 import sqlite3
+import os
 
 DATABASE_PATH = "data/chemai.db"
 
+print(f"[Search Database] Using database: {os.path.abspath(DATABASE_PATH)}")
+
 
 def search_compound(name):
-
-    conn = sqlite3.connect(DATABASE_PATH)
-
+    conn = sqlite3.connect(os.path.abspath(DATABASE_PATH))
     cursor = conn.cursor()
 
     cursor.execute(

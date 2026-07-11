@@ -1,5 +1,6 @@
 from database.database_manager import initialize_database
 from services.search_service import search_compound_menu
+from services.similarity_service import similarity_search_menu
 
 
 def show_banner():
@@ -10,7 +11,8 @@ def show_banner():
 
 def show_menu():
     print("\n1. Search Compound")
-    print("2. Exit")
+    print("2. Similarity Search")
+    print("3. Exit")
 
 
 def main():
@@ -28,6 +30,9 @@ def main():
             search_compound_menu()
 
         elif choice == "2":
+            similarity_search_menu()
+
+        elif choice == "3":
             print("\nThank you for using ChemAI!")
             break
 
