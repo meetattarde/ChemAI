@@ -1,0 +1,42 @@
+
+============================================================
+CHEMAI REPORT
+============================================================
+
+Compound Information
+------------------------------------------------------------
+Name              : benzene
+Formula           : C6H6
+Molecular Weight  : 78.11
+IUPAC Name        : benzene
+SMILES            : C1=CC=CC=C1
+InChIKey          : UHOVQNZJYSORNB-UHFFFAOYSA-N
+PubChem CID       : 241
+
+Calculated Properties
+------------------------------------------------------------
+{'Molecular Weight': 78.11, 'LogP': 1.69, 'TPSA': 0.0, 'H-Bond Donors': 0, 'H-Bond Acceptors': 0, 'Rotatable Bonds': 0, 'Heavy Atoms': 6, 'Ring Count': 1}
+
+Functional Groups
+------------------------------------------------------------
+['Benzene Ring']
+
+Atom Count
+------------------------------------------------------------
+{'C': 6}
+
+Ring Information
+------------------------------------------------------------
+{'Ring Count': 1, 'Aromatic Rings': 1}
+
+Lipinski Rule
+------------------------------------------------------------
+{'Violations': 0, 'Drug Like': True}
+
+Molecular Formula
+------------------------------------------------------------
+C6H6
+
+Structure Image
+------------------------------------------------------------
+images/benzene.png

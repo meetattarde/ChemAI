@@ -1,0 +1,42 @@
+
+============================================================
+CHEMAI REPORT
+============================================================
+
+Compound Information
+------------------------------------------------------------
+Name              : methane
+Formula           : CH4
+Molecular Weight  : 16.043
+IUPAC Name        : methane
+SMILES            : C
+InChIKey          : VNWKTOKETHGBQD-UHFFFAOYSA-N
+PubChem CID       : 297
+
+Calculated Properties
+------------------------------------------------------------
+{'Molecular Weight': 16.04, 'LogP': 0.64, 'TPSA': 0.0, 'H-Bond Donors': 0, 'H-Bond Acceptors': 0, 'Rotatable Bonds': 0, 'Heavy Atoms': 1, 'Ring Count': 0}
+
+Functional Groups
+------------------------------------------------------------
+[]
+
+Atom Count
+------------------------------------------------------------
+{'C': 1}
+
+Ring Information
+------------------------------------------------------------
+{'Ring Count': 0, 'Aromatic Rings': 0}
+
+Lipinski Rule
+------------------------------------------------------------
+{'Violations': 0, 'Drug Like': True}
+
+Molecular Formula
+------------------------------------------------------------
+CH4
+
+Structure Image
+------------------------------------------------------------
+images\methane.png
