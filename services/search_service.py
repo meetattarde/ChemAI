@@ -9,6 +9,7 @@ from chemistry.lipinski import lipinski_analysis
 from chemistry.formula import molecular_formula
 from chemistry.atom_counter import count_atoms
 from chemistry.rings import ring_information
+from utils.export_report import export_report
 
 
 def display_report(data):
@@ -26,9 +27,6 @@ def display_report(data):
     print(f"SMILES            : {data['smiles']}")
     print(f"InChIKey          : {data['inchikey']}")
     print(f"PubChem CID       : {data['pubchem_cid']}")
-
-    print("\nDEBUG")
-    print("SMILES =", repr(data["smiles"]))
 
     image = generate_structure(data["smiles"], data["name"])
 
@@ -85,14 +83,62 @@ def display_report(data):
 
     print(image)
 
+    report = f"""
+============================================================
+CHEMAI REPORT
+============================================================
+
+Compound Information
+------------------------------------------------------------
+Name              : {data['name']}
+Formula           : {data['formula']}
+Molecular Weight  : {data['molecular_weight']}
+IUPAC Name        : {data['iupac_name']}
+SMILES            : {data['smiles']}
+InChIKey          : {data['inchikey']}
+PubChem CID       : {data['pubchem_cid']}
+
+Calculated Properties
+------------------------------------------------------------
+{properties}
+
+Functional Groups
+------------------------------------------------------------
+{groups}
+
+Atom Count
+------------------------------------------------------------
+{atoms}
+
+Ring Information
+------------------------------------------------------------
+{rings}
+
+Lipinski Rule
+------------------------------------------------------------
+{lipinski}
+
+Molecular Formula
+------------------------------------------------------------
+{formula}
+
+Structure Image
+------------------------------------------------------------
+{image}
+"""
+
+    path = export_report(data["name"], report)
+
+    print(f"\n✅ Report saved to: {path}")
+
     print("\n" + "=" * 60)
 
 
 def search_compound_menu():
 
-    compound = input("\nEnter compound name : ").strip().lower()
+    query = input("\nSearch Compound : ")
 
-    result = search_compound(compound)
+    result = search_compound(query)
 
     if result:
 
@@ -112,7 +158,7 @@ def search_compound_menu():
 
     print("\nSearching PubChem...\n")
 
-    data = fetch_compound(compound)
+    data = fetch_compound(query)
     print(data)
 
     if data is None:
