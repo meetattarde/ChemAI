@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>ChemAI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="search-card">
+
+    <h1>🧪 ChemAI</h1>
+
+<p class="hero-tagline">
+
+Your AI-powered Organic Chemistry Assistant
+
+</p>
+
+<p class="hero-subtitle">
+
+Search • Analyze • Learn • Explore
+
+</p>
+    <form method="POST">
+
+        <input
+            type="text"
+            name="compound"
+            placeholder="Enter Compound Name"
+            value="{{ compound }}"
+            required>
+
+        <br><br>
+
+        <input
+            type="text"
+            name="compound2"
+            placeholder="Compare with..."
+            value="{{ compound2 }}">
+
+        <br><br>
+
+        <label><b>Select Reaction</b></label>
+
+        <br><br>
+
+        <select name="reaction">
+
+            <option value="">Select Reaction</option>
+
+            {% for reaction in reaction_options %}
+
+            <option
+                value="{{ reaction }}"
+                {% if reaction == selected_reaction %}
+                selected
+                {% endif %}
+            >
+
+                {{ reaction.title() }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+    <div class="card">
+
+<h2>🚀 Upcoming Modules</h2>
+
+<div class="badges">
+
+<span>🟢 Organic Chemistry</span>
+
+<span>🟡 Inorganic Chemistry (Coming Soon)</span>
+
+<span>🟡 Physical Chemistry (Coming Soon)</span>
+
+</div>
+
+<p style="margin-top:20px;">
+
+Version 1 focuses entirely on creating the best AI experience for Organic Chemistry.
+
+</p>
+
+</div>
+
+    {% if result %}
+
+    <div class="result-panel">
+
+        <h2>{{ result.name.title() }}</h2>
+
+        <p class="compound-subtitle">
+
+        {{ result.iupac_name }}
+
+        </p>
+
+        <p><b>Formula:</b> {{ result.formula }}</p>
+
+        <p><b>Molecular Weight:</b> {{ result.molecular_weight }}</p>
+
+        <p><b>IUPAC Name:</b> {{ result.iupac_name }}</p>
+
+        <p><b>SMILES:</b> {{ result.smiles }}</p>
+
+        <h3>2D Structure</h3>
+
+        <img
+            src="{{ url_for('static', filename=result.image) }}"
+            width="300">
+
+        <h3>ChemAI Explanation</h3>
+
+        <p>{{ result.ai_explanation }}</p>
+
+        <hr>
+
+        <h2>🤖 Ask ChemAI</h2>
+
+        <form method="POST">
+
+         <label><b>📚 Study Mode</b></label>
+
+         <select name="study_mode">
+
+         <option value="NCERT">NCERT</option>
+
+         <option value="NEET">NEET</option>
+
+         <option value="JEE">JEE</option>
+
+          <option value="College">College</option>
+
+         <option value="Research">Research</option>
+
+        </select>
+
+        <br><br>
+
+        <label><b>🎓 Explain Level</b></label>
+
+        <select name="explain_level">
+        <option value="Simple">Simple</option>
+        <option value="Standard" selected>Standard</option>
+        <option value="Detailed">Detailed</option>
+        </select>
+
+        <br><br>
+
+            <input
+                type="hidden"
+                name="compound"
+                value="{{ compound }}">
+
+            <input
+                type="hidden"
+                name="compound2"
+                value="{{ compound2 }}">
+
+            <input
+                type="text"
+                name="question"
+                placeholder="Ask anything about this compound...">
+
+            <br><br>
+
+            <button type="submit">
+                Ask AI
+            </button>
+
+        </form>
+
+        {% if result.ai_answer %}
+<h3>ChemAI Answer</h3>
+
+<p>{{ result.ai_answer }}</p>
+
+{% if result.followups %}
+
+<hr>
+
+<h3>💡 Suggested Questions</h3>
+
+<form method="POST">
+
+<input type="hidden" name="compound" value="{{ compound }}">
+
+{% for q in result.followups %}
+
+<button
+type="submit"
+name="question"
+value="{{ q }}">
+
+{{ q }}
+
+</button>
+
+<br><br>
+
+{% endfor %}
+
+</form>
+
+{% endif %}
+
+{% endif %} 
+
+    {% if result.progress %}
+
+<hr>
+
+<h3>📈 Learning Progress</h3>
+
+<progress value="{{ result.progress }}" max="100"></progress>
+
+<p>{{ result.progress }}% of this compound explored.</p>
+
+{% endif %}
+
+        <hr>
+
+<h3>⚡ Continue Learning</h3>
+
+<form method="POST">
+
+    <input type="hidden" name="compound" value="{{ compound }}">
+    <input type="hidden" name="study_mode" value="{{ request.form.get('study_mode','NCERT') }}">
+    <input type="hidden" name="explain_level" value="{{ request.form.get('explain_level','Standard') }}">
+
+    <button name="question"
+            value="Explain the reaction mechanism of this compound.">
+        ⚗️ Mechanism
+    </button>
+
+    <button name="question"
+            value="Generate 5 NEET MCQs on this compound.">
+        📝 MCQs
+    </button>
+
+    <button name="question"
+            value="Give me memory tricks for this compound.">
+        🧠 Memory Tricks
+    </button>
+
+    <button name="question"
+            value="Compare this compound with similar compounds.">
+        🔬 Compare
+    </button>
+
+</form>
+
+        {% if reaction_result %}
+
+        <hr>
+
+        <h2>⚗️ Reaction Prediction</h2>
+
+        <p><b>Product:</b> {{ reaction_result.product }}</p>
+
+        <p><b>Reaction Type:</b> {{ reaction_result.type }}</p>
+
+        <p><b>Conditions:</b> {{ reaction_result.conditions }}</p>
+
+        <p><b>Explanation:</b> {{ reaction_result.explanation }}</p>
+
+        <h3>Reaction Equation</h3>
+
+        <p style="font-size:22px">
+            {{ result.reaction_equation }}
+        </p>
+
+        <h3>🧠 ChemAI AI Analysis</h3>
+
+        <ul>
+
+        {% for point in result.brain %}
+
+            <li>{{ point }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        {% endif %}
+        <h3>⚠️ Safety Analysis</h3>
+
+        <p><b>Hazard Level:</b> {{ result.safety["Hazard Level"] }}</p>
+
+        <p><b>Flammable:</b> {{ result.safety["Flammable"] }}</p>
+
+        <p><b>Carcinogenic:</b> {{ result.safety["Carcinogenic"] }}</p>
+
+        <p><b>Corrosive:</b> {{ result.safety["Corrosive"] }}</p>
+
+        <p><b>Toxic:</b> {{ result.safety["Toxic"] }}</p>
+
+        <h4>Safety Advice</h4>
+
+        <ul>
+
+        {% for advice in result.safety["Advice"] %}
+
+            <li>{{ advice }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        <h3>ChemAI Reasoning</h3> 
+
+        <p style="white-space: pre-wrap;">{{ result.brain }}</p>
+
+        <h3>Calculated Properties</h3>
+
+        <ul>
+
+        {% for key, value in result.properties.items() %}
+
+            <li><b>{{ key }}</b> : {{ value }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        <h3>⚡ Chemical Reactivity</h3>
+
+        <ul>
+
+        {% for item in result.reactivity %}
+
+            <li>{{ item }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        <h3>🔬 Similar Compounds</h3>
+
+        <ul>
+
+        {% for compound in result.similar %}
+
+            <li>{{ compound.name }} ({{ compound.score }}%)</li>
+
+        {% endfor %}
+
+        </ul>
+
+        <h3>Functional Group Intelligence</h3>
+
+        {% for group in result.group_info %}
+
+        <div class="card">
+
+            <p><b>Description:</b> {{ group.description }}</p>
+
+            <p><b>Properties:</b></p>
+
+            <ul>
+
+            {% for p in group.properties %}
+
+                <li>{{ p }}</li>
+
+            {% endfor %}
+
+            </ul>
+
+            <p><b>Common Reactions:</b></p>
+
+            <ul>
+
+            {% for r in group.common_reactions %}
+
+                <li>{{ r }}</li>
+
+            {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endfor %}
+
+        <h3>Detected Functional Groups</h3>
+
+        <ul>
+
+        {% for group in result.groups %}
+
+            <li>{{ group }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        <h3>Atom Count</h3>
+
+        <p>{{ result.atoms }}</p>
+
+        <h3>Ring Information</h3>
+
+        <p>{{ result.rings }}</p>
+
+        <h3>Lipinski Rule</h3>
+
+        <p>{{ result.lipinski }}</p>
+
+    </div>
+
+    {% endif %}
+
+    {% if comparison %}
+
+    <hr>
+
+    <h2>⚖ Compound Comparison</h2>
+
+    <table border="1" cellpadding="8">
+
+        <tr>
+
+            <th>Property</th>
+
+            <th>{{ compound }}</th>
+
+            <th>{{ compound2 }}</th>
+
+        </tr>
+
+        {% for key, value in comparison.items() %}
+
+        <tr>
+
+            <td>{{ key }}</td>
+
+            <td>{{ value[0] }}</td>
+
+            <td>{{ value[1] }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>

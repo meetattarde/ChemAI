@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-header">
+
+<h1>⭐ My Favorite Compounds</h1>
+
+<p>All your saved compounds in one place.</p>
+
+</div>
+
+<div class="stats-grid">
+
+{% for compound in favorites %}
+
+<div class="card">
+
+<h2>{{ compound[0] }}</h2>
+
+<a href="/search?compound={{ compound[0] }}">
+
+<button>Open Compound</button>
+
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% if not favorites %}
+
+<div class="card">
+
+<h2>No Favorites Yet ❤️</h2>
+
+<p>Search compounds and save them here.</p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

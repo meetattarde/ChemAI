@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="hero">
+
+<h1>🤖 ChemAI Chat</h1>
+
+<p>
+
+Ask ChemAI anything about Organic Chemistry.
+
+Mechanisms, reactions, NEET, JEE, HSC, functional groups,
+
+or conceptual doubts.
+
+</p>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<div class="chat-window">
+
+<div class="bot-message">
+
+🧪 <b>ChemAI</b>
+
+<p>
+
+Hello! 👋
+
+I'm ChemAI.
+
+How can I help you today?
+
+</p>
+
+</div>
+
+</div>
+
+<form method="POST">
+
+<input
+type="text"
+name="question"
+placeholder="Ask ChemAI anything...">
+
+<br>
+
+<select name="study_mode">
+
+<option>Normal</option>
+
+<option>Exam Mode</option>
+
+<option>Teacher Mode</option>
+
+<option>Research Mode</option>
+
+</select>
+
+<br>
+
+<select name="explain_level">
+
+<option>Simple</option>
+
+<option>Intermediate</option>
+
+<option>Advanced</option>
+
+</select>
+
+<br>
+
+<button>
+
+🚀 Send
+
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="hero">
+
+<h1>👋 Welcome back, {{ username }}</h1>
+
+<p>
+
+Ready to explore Organic Chemistry today?
+
+</p>
+
+</div>
+
+<div class="dashboard-header">
+
+<h1>👋 Welcome, {{ username }}</h1>
+
+<p>
+
+Explore • Learn • Master Chemistry
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>🕒 Recent Searches</h2>
+
+<div class="badges">
+
+{% for search in recent_searches %}
+
+<span>
+
+🧪 {{ search[0] }}
+
+</span>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+<div class="quick-dashboard">
+
+<a href="/">🔍 Search</a>
+
+<a href="/favorites">⭐ Favorites</a>
+
+<a href="/profile">👤 Profile</a>
+
+<a href="/community">🌍 Community</a>
+
+</div>
+
+<div class="profile-card">
+
+    <div class="profile-avatar">
+
+        👨‍🔬
+
+    </div>
+
+    <div>
+
+        <h2>{{ username }}</h2>
+
+        <p>ChemAI Explorer</p>
+
+        <p>🧪 Keep learning chemistry every day!</p>
+
+    </div>
+
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+
+<h2>❤️</h2>
+
+<h3>{{ favorites|length }}</h3>
+
+<p>Favorites</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2>🔍</h2>
+
+<h3>{{ history|length }}</h3>
+
+<p>Recent Searches</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2>⭐</h2>
+
+<h3>{{ data.reviews }}</h3>
+
+<p>Reviews</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🏆 Achievements</h2>
+
+<div class="badges">
+
+<span>🧪 First Search</span>
+
+<span>❤️ First Favorite</span>
+
+<span>🤖 AI Explorer</span>
+
+</div>
+
+</div>
+
+<div class="quick-dashboard">
+
+<a href="/search">🔍 Search</a>
+
+<a href="/community">👥 Community</a>
+
+<a href="/learn">📚 Learn</a>
+
+<a href="/chat">🤖 ChemAI</a>
+
+</div>
+
+<br>
+
+<div class="cards">
+
+<div class="card">
+
+<h2>🔍 Searches</h2>
+
+<h1>{{ data.searches }}</h1>
+
+<p>Total searches</p>
+
+</div>
+
+<div class="card">
+
+<h2>🧪 Explored</h2>
+
+<h1>{{ data.explored }}</h1>
+
+<p>Unique compounds</p>
+
+</div>
+
+<div class="card">
+
+<h2>❤️ Favorites</h2>
+
+<h1>{{ data.favorites }}</h1>
+
+<p>Saved compounds</p>
+
+</div>
+
+<div class="card">
+
+<h2>📚 Progress</h2>
+
+<h1>{{ data.progress }}%</h1>
+
+<p>Learning Progress</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🧪 Favorite Compounds</h2>
+
+<h1>0</h1>
+
+<p>Coming Soon</p>
+
+</div>
+
+<div class="card">
+
+<h2>📚 Learning Progress</h2>
+
+<h1>0%</h1>
+
+<p>Coming Soon</p>
+
+</div>
+
+<div class="card">
+
+<h2>🔥 Daily Streak</h2>
+
+<h1>1</h1>
+
+<p>Coming Soon</p>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h2>🧠 Daily Chemistry Fact</h2>
+
+<p>{{ daily_fact }}</p>
+
+</div>
+
+<br>
+
+<div class="quick-actions">
+
+<button onclick="location.href='/search'">
+
+<br>
+
+<div class="card">
+
+<h2>❤️ Saved Compounds</h2>
+
+{% if favorites %}
+
+<ul>
+
+{% for compound in favorites %}
+
+<li>
+
+<a href="/search?compound={{ compound[0] }}">
+
+{{ compound[0] }}
+
+</a>
+
+<a href="/favorite/remove/{{ compound[0] }}">
+
+❌
+
+</a>
+
+</li>
+
+{% endfor %}
+
+</ul>
+
+{% else %}
+
+<p>No favorite compounds yet.</p>
+
+{% endif %}
+
+</div>
+
+<div class="card">
+
+<h2>📜 Recent Activity</h2>
+
+<p>
+Every compound you search is now automatically stored.
+In the next update this section will display your latest searches.
+</p>
+
+</div>
+
+🔍 Search Compound
+
+</button>
+
+<button onclick="location.href='/community'">
+
+🌍 Community
+
+</button>
+
+<button>
+
+❤️ Favorites
+
+</button>
+
+<button>
+
+⚙ Settings
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>🚀 ChemAI Version 1.0</h2>
+
+<p>
+
+🟢 Organic Chemistry — Available
+
+</p>
+
+<p>
+
+🟡 Inorganic Chemistry — Coming Soon
+
+</p>
+
+<p>
+
+🟡 Physical Chemistry — Coming Soon
+
+</p>
+
+</div>
+
+{% endblock %}

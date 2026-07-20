@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>ChemAI</title>
+
+    <link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+<link
+id="theme-css"
+rel="stylesheet"
+href="{{ url_for('static', filename='css/dark.css') }}">
+
+</head>
+
+<body>
+
+<div class="chem-background">
+
+<div class="bubble b1"></div>
+<div class="bubble b2"></div>
+<div class="bubble b3"></div>
+<div class="bubble b4"></div>
+<div class="bubble b5"></div>
+<div class="bubble b6"></div>
+<div class="ring r1">⬡</div>
+<div class="ring r2">⬡</div>
+<div class="ring r3">⬡</div>
+<div class="ring r4">⬡</div>
+<div class="atom a1"></div>
+<div class="atom a2"></div>
+<div class="atom a3"></div>
+<div class="atom a4"></div>
+<div class="atom a5"></div>
+<div class="atom a6"></div>
+<div class="atom a7"></div>
+<div class="atom a8"></div>
+
+</div>
+
+<nav class="navbar">
+
+    <div class="nav-logo">
+        🧪 <b>ChemAI</b>
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/dashboard">🏠 Dashboard</a>
+
+        <a href="/">🔍 Search</a>
+
+        <a href="/favorites">⭐ Favorites</a>
+
+        <a href="/profile">👤 Profile</a>
+
+        <a href="/logout">🚪 Logout</a>
+
+        <a href="/settings">⚙️ Settings</a>
+
+        <button id="themeToggle">🌙</button>
+
+    </div>
+
+</nav>
+
+<div class="sidebar">
+
+    <div class="logo">
+        <h2>🧪 ChemAI</h2>
+        <p>v1.0 Beta</p>
+    </div>
+
+    <hr>
+
+    <a href="/dashboard">
+        🏠 Dashboard
+    </a>
+
+    <a href="/profile">
+        👤 Profile
+    </a>
+
+    <a href="/search">
+        🔍 Compound Search
+    </a>
+
+    <a href="/chat">
+        🤖 AI Chat
+    </a>
+
+    <a href="/learn">
+        📚 Learn
+    </a>
+
+    <a href="/about">
+        ℹ About
+    </a>
+
+    <hr>
+
+    <h4>🚀 Coming Soon</h4>
+
+    <div class="coming-card">
+
+        <h4>⚛️ Inorganic Chemistry</h4>
+
+        <small>Launching Soon</small>
+
+    </div>
+
+    <div class="coming-card">
+
+        <h4>⚗️ Physical Chemistry</h4>
+
+        <small>Launching Soon</small>
+
+    </div>
+
+    <hr>
+
+    <div class="version">
+
+        Built with ❤️ by ChemAI
+
+    </div>
+
+</div>
+
+<div class="theme-toggle">
+
+<button id="themeToggle">
+
+🌙
+
+</button>
+
+</div>
+
+<div class="main">
+
+{% block content %}
+
+{% endblock %}
+
+</div>
+
+<script src="/static/js/main.js"></script>
+
+{% if session.get("user") %}
+<div id="welcomePopup" class="welcome-popup">
+    <div class="welcome-box">
+        <h2>👋 Welcome to ChemAI</h2>
+
+        <p>
+            Discover compounds, reactions, AI explanations,
+            safety, similarity, learning tools and much more.
+        </p>
+
+        <hr>
+
+        <p>
+            💡 <b>Did you know?</b><br>
+            Carbon forms more compounds than any other element.
+        </p>
+
+        <button onclick="closeWelcome()">
+            Start Exploring
+        </button>
+    </div>
+</div>
+
+<script>
+if(localStorage.getItem("welcome_seen")=="yes"){
+    document.getElementById("welcomePopup").style.display="none";
+}
+
+function closeWelcome(){
+    localStorage.setItem("welcome_seen","yes");
+    document.getElementById("welcomePopup").style.display="none";
+}
+</script>
+{% endif %}
+
+<footer>
+
+<hr>
+
+<h3>ChemAI</h3>
+
+<p>
+
+Version 2.0
+
+</p>
+
+<p>
+
+Made with ❤️ by Meet Attarde
+
+</p>
+
+</footer>
+
+<div id="loading-screen" style="display:none;">
+
+    <div class="loader-box">
+
+        <h2>🧪 ChemAI</h2>
+
+        <h3>Analyzing Compound...</h3>
+
+        <p>Please wait while AI is generating your report.</p>
+
+        <div class="loader"></div>
+
+    </div>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const forms=document.querySelectorAll("form");
+
+    forms.forEach(form=>{
+
+        form.addEventListener("submit",function(){
+
+          const messages=[
+
+"🧪 Reading molecular structure...",
+
+"⚛ Calculating molecular properties...",
+
+"🤖 ChemAI is thinking...",
+
+"📚 Collecting chemistry knowledge...",
+
+"⚗ Preparing AI explanation..."
+
+];
+
+let i=0;
+
+setInterval(()=>{
+
+const p=document.querySelector(".loader-box p");
+
+if(p){
+
+p.innerHTML=messages[i];
+
+i=(i+1)%messages.length;
+
+}
+
+},1800);
+
+document.getElementById("loading-screen").style.display="flex";
+
+        });
+
+    });
+
+});
+
+</script>
+
+<script>
+
+const compounds=[
+
+"Benzene",
+
+"Ethanol",
+
+"Methanol",
+
+"Phenol",
+
+"Acetone",
+
+"Acetic Acid",
+
+"Aspirin",
+
+"Glucose",
+
+"Toluene",
+
+"Aniline",
+
+"Propanol",
+
+"Butanol"
+
+];
+
+const input=document.getElementById("compound");
+
+if(input){
+
+const box=document.getElementById("suggestions");
+
+input.addEventListener("keyup",()=>{
+
+const value=input.value.toLowerCase();
+
+box.innerHTML="";
+
+if(value===""){
+
+box.style.display="none";
+
+return;
+
+}
+
+const results=compounds.filter(c=>c.toLowerCase().includes(value));
+
+results.forEach(item=>{
+
+const div=document.createElement("div");
+
+div.className="suggestion";
+
+div.innerHTML=item;
+
+div.onclick=()=>{
+
+input.value=item;
+
+box.style.display="none";
+
+};
+
+box.appendChild(div);
+
+});
+
+box.style.display=results.length?"block":"none";
+
+});
+
+}
+
+</script>
+
+<div id="toast" class="toast">
+
+✅ Success
+
+</div>
+
+<a href="/chat" class="floating-ai">
+
+🤖
+
+</a>
+
+<script>
+
+function showToast(message){
+
+const toast=document.getElementById("toast");
+
+toast.innerHTML=message;
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+
+toast.classList.remove("show");
+
+},2500);
+
+}
+
+</script>
+
+<script>
+
+const btn=document.getElementById("themeToggle");
+
+if(btn){
+
+btn.onclick=function(){
+
+document.body.classList.toggle("dark-mode");
+
+localStorage.setItem(
+
+"theme",
+
+document.body.classList.contains("dark-mode")?"dark":"light"
+
+);
+
+};
+
+if(localStorage.getItem("theme")=="dark"){
+
+document.body.classList.add("dark-mode");
+
+}
+
+}
+
+</script>
+
+<!-- Floating AI -->
+
+<a href="#" id="aiBubble" class="floating-ai">
+
+🤖
+
+</a>
+
+<div id="aiWindow" class="ai-window">
+
+<div class="ai-header">
+
+🧪 ChemAI Assistant
+
+<button id="closeAI">✖</button>
+
+</div>
+
+<div class="ai-body">
+
+<div id="chatMessages">
+
+<p>
+
+👋 Hello!
+
+Ask me anything about Chemistry.
+
+</p>
+
+</div>
+
+<textarea
+
+id="aiQuestion"
+
+placeholder="Ask ChemAI...">
+
+</textarea>
+
+<button id="sendAI">
+
+Send
+
+</button>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

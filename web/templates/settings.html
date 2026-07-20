@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="hero">
+
+<h1>⚙️ Account Settings</h1>
+
+<p>Manage your ChemAI account</p>
+
+</div>
+
+<div class="card">
+
+<h2>👤 Edit Profile</h2>
+
+<div class="card">
+
+<h2>🔒 Change Password</h2>
+
+<form method="POST" action="/change_password">
+
+<label>Current Password</label>
+
+<input
+type="password"
+name="old_password"
+required>
+
+<label>New Password</label>
+
+<input
+type="password"
+name="new_password"
+required>
+
+<button type="submit">
+
+🔒 Change Password
+
+</button>
+
+</form>
+
+</div>
+
+{% with messages = get_flashed_messages() %}
+
+{% if messages %}
+
+<div class="card">
+
+✅ {{ messages[0] }}
+
+</div>
+
+{% endif %}
+
+{% endwith %}
+
+<form method="POST" action="/update_profile">
+
+<label>Username</label>
+
+<input
+type="text"
+name="username"
+value="{{ username }}"
+required>
+
+<label>Email</label>
+
+<input
+type="email"
+name="email"
+value="{{ email }}"
+required>
+
+<button type="submit">
+
+💾 Save Changes
+
+</button>
+
+</form>
+
+</div>

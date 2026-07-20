@@ -1,0 +1,630 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="hero">
+
+<h1>🔍 Compound Search</h1>
+
+<p>
+Search thousands of organic compounds with AI-powered analysis,
+reaction prediction, safety analysis and molecular properties.
+</p>
+
+<form method="POST">
+
+<div class="search-box">
+
+<input
+
+type="text"
+
+id="compound"
+
+name="compound"
+
+placeholder="Search any compound..."
+
+autocomplete="off"
+
+value="{{ compound }}"
+
+required>
+
+<div id="suggestions"></div>
+
+</div>
+
+<button type="submit">
+
+🔍 Search Compound
+
+</button>
+
+</form>
+
+</div>
+
+<br>
+
+<div class="action-toolbar">
+
+<button>🤖 Ask ChemAI</button>
+
+<button>⚖ Compare</button>
+
+<button>📄 Download PDF</button>
+
+<button>❤️ Save</button>
+
+<button>📤 Share</button>
+
+{% if session.get("user") %}
+
+<button onclick="location.href='/favorite/{{ result.name }}'">
+
+❤️ Save Favorite
+
+</button>
+
+{% endif %}
+
+</div>
+
+<br>
+
+<h2>🔥 Popular Searches</h2>
+
+<div class="cards">
+
+<div class="card" onclick="location.href='/search?compound=benzene'">
+<h2>🧪 Benzene</h2>
+<p>Aromatic Hydrocarbon</p>
+</div>
+
+<div class="card" onclick="location.href='/search?compound=ethanol'">
+<h2>🍷 Ethanol</h2>
+<p>Alcohol</p>
+</div>
+
+<div class="card" onclick="location.href='/search?compound=phenol'">
+<h2>⚗️ Phenol</h2>
+<p>Phenolic Compound</p>
+</div>
+
+<div class="card" onclick="location.href='/search?compound=glucose'">
+<h2>🍬 Glucose</h2>
+<p>Carbohydrate</p>
+</div>
+
+<div class="card" onclick="location.href='/search?compound=acetone'">
+<h2>🧫 Acetone</h2>
+<p>Ketone</p>
+</div>
+
+<div class="card" onclick="location.href='/search?compound=aspirin'">
+<h2>💊 Aspirin</h2>
+<p>Medicine</p>
+</div>
+
+</div>
+
+{% if result %}
+
+<hr>
+
+<div class="card">
+
+<h1>🧪 {{ result.name }}</h1>
+
+<p style="font-size:24px;"><b>{{ result.formula }}</b></p>
+
+<p>{{ result.iupac_name }}</p>
+
+{% if result.image %}
+<img
+src="{{ url_for('static', filename=result.image) }}"
+width="300">
+{% endif %}
+
+<!-- REACTION PREDICTOR -->
+
+<div class="card">
+
+    <h2>⚗️ Reaction Prediction</h2>
+
+    <form method="POST">
+
+        <input
+            type="hidden"
+            name="compound"
+            value="{{ compound }}">
+
+        <label><b>Select Reaction</b></label>
+
+        <br><br>
+
+        <select name="reaction">
+
+            <option value="">Choose a Reaction</option>
+
+            {% for reaction in reaction_options %}
+
+            <option
+                value="{{ reaction }}"
+                {% if reaction == selected_reaction %}selected{% endif %}>
+
+                {{ reaction }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+        {% for key,value in result.properties.items() %}
+
+<div class="property">
+
+<p>
+
+<b>{{ key }}</b>
+
+{{ value }}
+
+</p>
+
+<div class="progress">
+
+<div
+
+class="progress-fill"
+
+style="width:70%;">
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+        <button type="submit">
+
+            ⚗ Predict Reaction
+
+        </button>
+
+    </form>
+
+    {% if reaction_result %}
+
+    <hr>
+
+    <h3>
+
+        🧪 Predicted Reaction
+
+    </h3>
+
+    <p>
+
+        <b>Equation:</b>
+
+        {{ result.reaction_equation }}
+
+    </p>
+
+    {% endif %}
+
+</div>
+
+<!-- COMPARISON -->
+
+<div class="card">
+
+    <h2>⚖ Compare Compounds</h2>
+
+    <form method="POST">
+
+        <input
+            type="hidden"
+            name="compound"
+            value="{{ compound }}">
+
+        <input
+            type="text"
+            name="compound2"
+            placeholder="Enter second compound">
+
+        <br><br>
+
+        <button type="submit">
+
+            ⚖ Compare
+
+        </button>
+
+    </form>
+
+    {% if comparison %}
+
+    <hr>
+
+    <h3>
+
+        📊 Comparison Result
+
+    </h3>
+
+    <pre>{{ comparison }}</pre>
+
+    {% endif %}
+
+</div>
+
+<!-- FEEDBACK -->
+
+<div class="card">
+
+    <h2>⭐ Rate ChemAI</h2>
+
+    <p>
+
+        Your feedback helps us improve ChemAI.
+
+    </p>
+
+    <button>⭐⭐⭐⭐⭐</button>
+
+    <button>💬 Send Feedback</button>
+
+</div>
+
+<footer class="footer">
+
+    <hr>
+
+    <p>
+
+        🧪 ChemAI v1.0 • Built with ❤️ for Chemistry Students
+
+    </p>
+
+    <p>
+
+        Organic AI • Physical AI (Coming Soon) • Inorganic AI (Coming Soon)
+
+    </p>
+
+</footer>
+<!-- AI QUESTION -->
+
+<div class="card">
+
+    <h2>🤖 Ask ChemAI</h2>
+
+    <form method="POST">
+
+        <input
+            type="hidden"
+            name="compound"
+            value="{{ compound }}">
+
+        <textarea
+            name="question"
+            rows="4"
+            placeholder="Ask anything about this compound..."
+            required></textarea>
+
+        <br><br>
+
+        <label><b>Study Mode</b></label>
+
+        <select name="study_mode">
+
+            <option value="NCERT">NCERT</option>
+
+            <option value="NEET">NEET</option>
+
+            <option value="JEE">JEE</option>
+
+            <option value="Research">Research</option>
+
+        </select>
+
+        <br><br>
+
+        <label><b>Explanation Level</b></label>
+
+        <select name="explain_level">
+
+            <option value="simple">Simple</option>
+
+            <option value="standard" selected>Standard</option>
+
+            <option value="advanced">Advanced</option>
+
+        </select>
+
+        <br><br>
+
+        <button type="submit">
+
+            🚀 Ask ChemAI
+
+        </button>
+
+    </form>
+
+    {% if result.ai_answer %}
+
+    <hr>
+
+    <h3>
+
+        💬 ChemAI Response
+
+    </h3>
+
+    <div class="ai-answer">
+
+        {{ result.ai_answer|safe }}
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<!-- FOLLOW UP QUESTIONS -->
+
+{% if result.followups %}
+
+<div class="card">
+
+    <h2>
+
+        💡 Suggested Questions
+
+    </h2>
+
+    <form method="POST">
+
+        <input
+            type="hidden"
+            name="compound"
+            value="{{ compound }}">
+
+        {% for q in result.followups %}
+
+        <button
+            class="suggest-btn"
+            type="submit"
+            name="question"
+            value="{{ q }}">
+
+            {{ q }}
+
+        </button>
+
+        <br><br>
+
+        {% endfor %}
+
+    </form>
+
+</div>
+
+{% endif %}
+
+<!-- LEARNING PROGRESS -->
+
+<div class="card">
+
+    <h2>
+
+        📈 Learning Progress
+
+    </h2>
+
+    <p>
+
+        {{ result.progress }}
+
+    </p>
+
+</div>
+
+<!-- SHARE -->
+
+<div class="card">
+
+    <h2>
+
+        🚀 Share ChemAI
+
+    </h2>
+
+    <button>
+
+        📤 Share Compound
+
+    </button>
+
+    <button>
+
+        ❤️ Save Favourite
+
+    </button>
+
+    <button onclick="location.href='/download/{{ result.name }}'">
+
+    📄 Download PDF
+
+    </button>
+
+</div>
+
+<!-- COMING SOON -->
+
+<div class="card">
+
+    <h2>
+
+        🚀 Coming Soon
+
+    </h2>
+
+    <ul>
+
+        <li>🧪 Physical Chemistry AI</li>
+
+        <li>⚛ Inorganic Chemistry AI</li>
+
+        <li>👥 Community Edition</li>
+
+        <li>📚 ChemAI Learning Engine 2.0</li>
+
+        <li>📱 Android App</li>
+
+    </ul>
+
+</div>
+<!-- PREMIUM FEATURES -->
+
+<div class="card">
+
+    <h2>🧪 ChemAI Statistics</h2>
+
+    <div class="stats-grid">
+
+        <div class="stat-box">
+            <h3>Formula</h3>
+            <p>{{ result.formula }}</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>Atoms</h3>
+            <p>{{ result.atoms }}</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>Rings</h3>
+            <p>{{ result.rings }}</p>
+        </div>
+
+        <div class="stat-box">
+            <h3>Groups</h3>
+            <p>{{ result.groups|length }}</p>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUICK LINKS -->
+
+<div class="card">
+
+    <h2>🚀 Quick Actions</h2>
+
+    <div class="quick-grid">
+
+        <button onclick="window.scrollTo(0,0)">
+            🔍 Search Again
+        </button>
+
+        <button onclick="document.getElementById('safety').scrollIntoView()">
+            ⚠ Safety
+        </button>
+
+        <button onclick="window.print()">
+            🖨 Print Report
+        </button>
+
+        <button>
+            ❤️ Favourite
+        </button>
+
+    </div>
+
+</div>
+
+<!-- RELATED TOPICS -->
+
+<div class="card">
+
+    <h2>📚 Learn More</h2>
+
+    <ul>
+
+        <li>Reaction Mechanism</li>
+
+        <li>Industrial Preparation</li>
+
+        <li>Uses in Daily Life</li>
+
+        <li>Laboratory Tests</li>
+
+        <li>Spectroscopy</li>
+
+        <li>Environmental Impact</li>
+
+    </ul>
+
+</div>
+
+<!-- DISCLAIMER -->
+
+<div class="card">
+
+    <h2>ℹ Disclaimer</h2>
+
+    <p>
+
+        ChemAI provides educational chemistry information generated
+        using scientific databases and AI. Always verify laboratory
+        procedures and safety precautions from official sources before
+        performing experiments.
+
+    </p>
+
+</div>
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <h2>🧪 ChemAI</h2>
+
+        <p>
+
+            The Future of Chemistry Learning.
+
+        </p>
+
+        <hr>
+
+        <p>
+
+            Organic Chemistry AI • Built for Students, Teachers & Researchers
+
+        </p>
+
+        <p>
+
+            © 2026 ChemAI. All Rights Reserved.
+
+        </p>
+
+    </div>
+
+</footer>
+
+{% endif %}
+
+{% endblock %}

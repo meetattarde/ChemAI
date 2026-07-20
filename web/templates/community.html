@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="hero">
+
+    <h1>👥 ChemAI Community</h1>
+
+    <p>
+        Help us improve ChemAI by rating the platform,
+        reporting bugs and suggesting new features.
+    </p>
+
+</div>
+
+<div class="card">
+
+    <h2>⭐ Rate ChemAI</h2>
+
+    <form method="POST">
+
+        <label>Your Rating</label>
+
+        <select name="rating" required>
+
+            <option value="">Select Rating</option>
+
+            <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+
+            <option value="4">⭐⭐⭐⭐ Very Good</option>
+
+            <option value="3">⭐⭐⭐ Good</option>
+
+            <option value="2">⭐⭐ Fair</option>
+
+            <option value="1">⭐ Poor</option>
+
+        </select>
+
+        <br><br>
+
+        <button type="submit" name="action" value="rating">
+
+            ⭐ Submit Rating
+
+        </button>
+
+    </form>
+
+</div>
+
+<div class="card">
+
+    <h2>💬 Send Feedback</h2>
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Your Name (Optional)">
+
+        <br><br>
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Email (Optional)">
+
+        <br><br>
+
+        <select name="category">
+
+            <option>Feedback</option>
+
+            <option>Feature Request</option>
+
+            <option>Bug Report</option>
+
+        </select>
+
+        <br><br>
+
+        <textarea
+            name="message"
+            rows="6"
+            placeholder="Write your feedback..."
+            required></textarea>
+
+        <br><br>
+
+        <button type="submit" name="action" value="feedback">
+
+            🚀 Submit Feedback
+
+        </button>
+
+    </form>
+
+</div>
+
+{% if success %}
+
+<div class="card">
+
+    <h2>✅ Thank You!</h2>
+
+    <p>{{ success }}</p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
