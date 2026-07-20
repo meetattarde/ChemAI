@@ -3,3 +3,4 @@ requests
 rdkit
 gunicorn
 python-dotenv
+reportlab
