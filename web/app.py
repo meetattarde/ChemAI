@@ -84,7 +84,13 @@ initialize_recent_searches()
 
 print("Static folder:", app.static_folder)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
+def home():
+    if "user" in session:
+        return redirect("/dashboard")
+    return redirect("/login")
+
+@app.route("/search", methods=["GET", "POST"])
 def home():
     compound = ""
     compound2 = ""
@@ -197,6 +203,9 @@ def home():
 
 @app.route("/dashboard")
 def dashboard():
+    
+    if "user" not in session:
+        return redirect("/login")
 
     username = session.get("user")
 
@@ -217,9 +226,12 @@ def dashboard():
         favorites=favorites,
         recent_searches=recent_searches
     )
-
+    
 @app.route("/search", methods=["GET", "POST"])
 def search():
+    
+    if "user" not in session:
+        return redirect("/login")
 
     compound = request.args.get("compound", "")
     result = None
@@ -273,8 +285,14 @@ def search():
 def chat():
     return render_template("chat.html")
 
+    if "user" not in session:
+        return redirect("/login")
+
 @app.route("/ask_ai", methods=["POST"])
 def ai_chat():
+    
+    if "user" not in session:
+        return redirect("/login")
 
     question = request.form.get("question")
 
@@ -293,13 +311,22 @@ def ai_chat():
 def learn():
     return render_template("learn.html")
 
+    if "user" not in session:
+        return redirect("/login")
+
 
 @app.route("/about")
 def about():
     return render_template("about.html")
 
+    if "user" not in session:
+        return redirect("/login")
+
 @app.route("/community", methods=["GET", "POST"])
 def community():
+    
+    if "user" not in session:
+        return redirect("/login")
 
     success = None
 
@@ -448,7 +475,7 @@ def logout():
 
     session.clear()
 
-    return redirect("/")
+    return redirect("/login")
 @app.route("/favorite/<compound>")
 @app.route("/favorites")
 def favorites():
