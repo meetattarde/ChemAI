@@ -91,7 +91,7 @@ def home():
     return redirect("/login")
 
 @app.route("/search", methods=["GET", "POST"])
-def home():
+def search():
     compound = ""
     compound2 = ""
     comparison = None
